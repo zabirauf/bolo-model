@@ -6,7 +6,7 @@ interface BoloPost {
     title: string;
     markdown: string;
     tags: PostTag[];
-    authorId: string;
+    author: Author;
     publishedAt: Date;
     updatedAt: Date;
     previousIterationId: string;
@@ -19,7 +19,7 @@ export const serialize: SerializeToIPLDFunc<BoloPost> = function(obj: BoloPost):
         'title': obj.title,
         'markdown': obj.markdown,
         'tags': obj.tags ? obj.tags.map(postTagSerialize) : [],
-        'author': <MerkleLink> {'/': obj.authorId},
+        'author': obj.author ? authorSerialize(obj.author) : null,
         'publishedAt': obj.publishedAt.toDateString(),
         'updatedAt': obj.updatedAt.toDateString(),
         'previousIteration': obj.previousIterationId ? <MerkleLink> {'/': obj.previousIterationId} : null,
@@ -33,7 +33,7 @@ export const deserialize: DeserializeFromIPLDFunc<BoloPost> = function(graph: Me
         title: <string> graph['title'],
         markdown: <string> graph['markdown'],
         tags: (<MerkleGraph[]> graph['tags']).map(postTagDeserialize),
-        authorId: (<MerkleLink>graph['author'])['/'],
+        author: graph['author'] ? authorDeserialize(<MerkleGraph>graph['author']) : null,
         publishedAt: new Date(<string> graph['publishedAt']),
         updatedAt: new Date(<string> graph['updatedAt']),
         previousIterationId: graph['previousIteration'] ? (<MerkleLink> graph['previousIteration'])['/'] : null
