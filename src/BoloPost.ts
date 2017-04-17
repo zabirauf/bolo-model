@@ -2,6 +2,9 @@ import {SerializeToIPLDFunc, DeserializeFromIPLDFunc, MerkleGraph, MerkleLink} f
 import Author, {serialize as authorSerialize, deserialize as authorDeserialize} from './Author';
 import PostTag, {serialize as postTagSerialize, deserialize as postTagDeserialize} from './PostTag';
 
+declare function require(name: string): any;
+const CID = require('cids');
+
 interface BoloPost {
     title: string;
     markdown: string;
@@ -36,7 +39,9 @@ export const deserialize: DeserializeFromIPLDFunc<BoloPost> = function(graph: Me
         author: graph['author'] ? authorDeserialize(<MerkleGraph>graph['author']) : null,
         publishedAt: new Date(<string> graph['publishedAt']),
         updatedAt: new Date(<string> graph['updatedAt']),
-        previousIterationId: graph['previousIteration'] ? (<MerkleLink> graph['previousIteration'])['/'] : null
+        previousIterationId: graph['previousIteration']
+                                ? new CID((<MerkleLink>graph['previousIteration'])['/']).toBaseEncodedString()
+                                : null
     }
 
     return obj;
