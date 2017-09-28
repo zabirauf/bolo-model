@@ -1,15 +1,23 @@
 {
   "name": "bolo-model",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "The model for the Bolo platform",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "./node_modules/typescript/bin/tsc -p ./",
+    "prepublishOnly": "./node_modules/typescript/bin/tsc -p ./"
   },
-  "keywords": [],
+  "keywords": [
+    "bolo"
+  ],
   "author": "Zohaib Rauf",
-  "license": "ISC",
+  "homepage": "https://github.com/zabirauf/bolo-model",
+  "license": "MIT",
   "dependencies": {
     "cids": "^0.5.0"
+  },
+  "devDependencies": {
+    "typescript": "^2.5.3"
   }
 }
